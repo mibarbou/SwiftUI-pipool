@@ -9,7 +9,7 @@ import SwiftUI
 
 @main
 struct PipoolApp: App {
-    
+    // swiftlint:disable weak_delegate
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @Environment(\.scenePhase) private var scenePhase
     

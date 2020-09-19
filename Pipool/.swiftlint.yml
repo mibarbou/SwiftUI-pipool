@@ -1,0 +1,39 @@
+disabled_rules:
+  - trailing_whitespace
+  - legacy_hashing
+opt_in_rules:
+  - empty_count
+  - first_where
+  - last_where
+excluded:
+  - Pods
+  - fastlane
+  - Example
+  - PipoolTests
+  - PipoolUITests
+included:
+
+line_length: 150
+
+function_body_length: 50
+
+function_parameter_count: 8
+
+identifier_name:
+  min_length: # only min_length
+    error: 2 # only error
+  excluded: # excluded via string array
+    - id
+    - ip
+    - db
+    - sn
+    - r
+    - s
+    - url
+    - EaE
+    - dc
+
+type_name:
+  excluded:
+    - DC
+
