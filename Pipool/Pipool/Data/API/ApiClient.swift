@@ -9,17 +9,46 @@ import Foundation
 import Moya
 
 protocol ApiClient {
-    
-    var provider: MoyaProvider<PipoolApi> { get }
-    
-    func login(username: String,
+        
+    func login(email: String,
                password: String,
                completion: @escaping (Result<LoginResponse, PipoolApiError>) -> Void)
+    
+    func signUp(name: String,
+                surname: String,
+                email: String,
+                password: String,
+                completion: @escaping (Result<LoginResponse, PipoolApiError>) -> Void)
 }
 
 class ApiClientDefault: ApiClient {
     
-    var provider: MoyaProvider<PipoolApi> = MoyaProvider<PipoolApi>()
+    private var provider = MoyaProvider<PipoolApi>()
+    
+    func login(email: String,
+               password: String,
+               completion: @escaping (Result<LoginResponse, PipoolApiError>) -> Void) {
+        let data = LoginRequest(email: email,
+                                password: email)
+        self.request(.login(data), completion: completion)
+    }
+    
+    func signUp(name: String,
+                surname: String,
+                email: String,
+                password: String,
+                completion: @escaping (Result<LoginResponse, PipoolApiError>) -> Void) {
+        let data = SignUpRequest(name: name,
+                                    surname: surname,
+                                    email: email,
+                                    password: password)
+        self.request(.signUp(data), completion: completion)
+    }
+    
+}
+
+// MARK: - Private methods
+extension ApiClientDefault {
     
     private func request<T: Decodable>(_ endpoint: PipoolApi,
                                        completion: @escaping (Result<T, PipoolApiError>) -> Void) {
@@ -27,23 +56,16 @@ class ApiClientDefault: ApiClient {
             switch result {
             case .success(let response):
                 do {
-                    let data = !response.data.isEmpty ? response.data : "{}".data(using: .utf8)!
-                    let decodedResponse = try JSONDecoder().decode(T.self, from: data)
-                    completion(.success(decodedResponse))
+                    let decodedResponse = try JSONDecoder().decode(ApiResponse<T>.self, from: response.data)
+                    completion(.success(decodedResponse.data))
                 } catch {
-                    completion(.failure(.parserError))
+                    completion(.failure(.parser))
                 }
             case .failure(let error):
-                completion(.failure(.defaultError))
+                print(error.localizedDescription)
+                completion(.failure(.generic))
             }
             
         }
     }
-    
-    func login(username: String,
-               password: String,
-               completion: @escaping (Result<LoginResponse, PipoolApiError>) -> Void) {
-        self.request(.login(username: username, password: password), completion: completion)
-    }
-    
 }
