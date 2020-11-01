@@ -9,10 +9,20 @@ import Foundation
 import SwiftUI
 
 class LoginViewModel: ObservableObject, Identifiable {
-    @Published var email: String = ""
-    @Published var password: String = ""
+    @Published var email: String = "" {
+        didSet {
+            validatedFields()
+        }
+    }
+    @Published var password: String = "" {
+        didSet {
+            validatedFields()
+        }
+    }
     
-    private var interactor: LoginInteractor = LoginInteractorDefault()
+    @Published var isTextFieldsFilled: Bool = false
+    
+    private var interactor: AuthenticatorInteractor = AuthenticatorInteractorDefault()
     
     func doLogin() {
         interactor.loginWith(email: email,
@@ -24,6 +34,10 @@ class LoginViewModel: ObservableObject, Identifiable {
                 print(error)
             }
         }
+    }
+    
+    func validatedFields() {
+        isTextFieldsFilled = email.isFilled && password.isFilled
     }
     
 }

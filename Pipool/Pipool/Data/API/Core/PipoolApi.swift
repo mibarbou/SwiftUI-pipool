@@ -23,7 +23,7 @@ extension PipoolApi: TargetType, AccessTokenAuthorizable {
     }
     
     var baseURL: URL {
-        return URL(string: "http://167.71.143.188/api")!
+        return URL(string: "\(Configuration.serverURLString)/api")!
     }
     
     var headers: [String: String]? {

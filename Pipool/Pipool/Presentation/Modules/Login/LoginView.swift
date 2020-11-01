@@ -13,15 +13,22 @@ struct LoginView: View {
     var body: some View {
         VStack {
             Spacer()
-            PlaceholderTextField(placeholder: Text("email"), text: $viewModel.email).padding()
-            SecurePlaceholderTextField(placeholder: Text("password"), text: $viewModel.password).padding()
+            PlaceholderTextField(placeholder: Text("email"),
+                                 text: $viewModel.email)
+                .padding()
+            SecurePlaceholderTextField(placeholder: Text("password"),
+                                       text: $viewModel.password)
+                .padding()
+            PipoolButton(text: "Login",
+                         action: viewModel.doLogin)
+                .padding()
+                .disabled(!viewModel.isTextFieldsFilled)
             Spacer()
-            PipoolButton(text: "Login", action: {
-                viewModel.doLogin()
-            })
-            .padding()
-            .disabled(false)
-        }
+        }.padding().gesture(
+            TapGesture()
+                .onEnded({ _ in
+                    self.hideKeyboard()
+            }))
     }
 }
 
