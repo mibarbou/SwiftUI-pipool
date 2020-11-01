@@ -17,6 +17,6 @@ struct UserResponse: Decodable {
     let name: String
     let surname: String
     let email: String
-    let createdAt: String
-    let updatedAt: String
+//    let createdAt: String
+//    let updatedAt: String
 }

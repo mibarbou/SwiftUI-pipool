@@ -18,16 +18,12 @@ extension PipoolApi: TargetType, AccessTokenAuthorizable {
     var authorizationType: AuthorizationType? {
         switch self {
         case .login, .signUp:
-            return .bearer
+            return .none
         }
     }
     
-    var environmentBaseURL: String {
-        return ""
-    }
-    
     var baseURL: URL {
-        return URL(string: environmentBaseURL)!
+        return URL(string: "http://167.71.143.188/api")!
     }
     
     var headers: [String: String]? {

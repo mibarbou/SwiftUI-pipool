@@ -19,17 +19,24 @@ protocol ApiClient {
                 email: String,
                 password: String,
                 completion: @escaping (Result<LoginResponse, PipoolApiError>) -> Void)
+    
 }
 
 class ApiClientDefault: ApiClient {
     
-    private var provider = MoyaProvider<PipoolApi>()
+    var provider: MoyaProvider<PipoolApi> {
+        return MoyaProvider<PipoolApi>(plugins: [
+            NetworkLoggerPlugin(configuration: NetworkLoggerPlugin.Configuration(logOptions: .verbose)),
+            AccessTokenPlugin { _ in KeychainRepositoryDefault().getUserToken(with: "") ?? "" }
+            ]
+        )
+    }
     
     func login(email: String,
                password: String,
                completion: @escaping (Result<LoginResponse, PipoolApiError>) -> Void) {
         let data = LoginRequest(email: email,
-                                password: email)
+                                password: password)
         self.request(.login(data), completion: completion)
     }
     
@@ -52,6 +59,7 @@ extension ApiClientDefault {
     
     private func request<T: Decodable>(_ endpoint: PipoolApi,
                                        completion: @escaping (Result<T, PipoolApiError>) -> Void) {
+        
         provider.request(endpoint) { result in
             switch result {
             case .success(let response):
@@ -68,4 +76,5 @@ extension ApiClientDefault {
             
         }
     }
+    
 }

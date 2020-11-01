@@ -8,13 +8,19 @@
 import SwiftUI
 
 struct LoginView: View {
-    @State var email: String
-    @State var password: String
+    @ObservedObject var viewModel: LoginViewModel = LoginViewModel()
     
     var body: some View {
         VStack {
-            TextField("email", text: $email).padding()
-            TextField("password", text: $password).padding()
+            Spacer()
+            PlaceholderTextField(placeholder: Text("email"), text: $viewModel.email).padding()
+            SecurePlaceholderTextField(placeholder: Text("password"), text: $viewModel.password).padding()
+            Spacer()
+            PipoolButton(text: "Login", action: {
+                viewModel.doLogin()
+            })
+            .padding()
+            .disabled(false)
         }
     }
 }
@@ -22,8 +28,7 @@ struct LoginView: View {
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            LoginView(email: "mibarbou@gmail.com",
-                      password: "123456")
+            LoginView()
         }
     }
 }
