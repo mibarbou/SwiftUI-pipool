@@ -25,9 +25,10 @@ protocol ApiClient {
 class ApiClientDefault: ApiClient {
     
     var provider: MoyaProvider<PipoolApi> {
+        let userPreferences = UserPeferencesDefault()
         return MoyaProvider<PipoolApi>(plugins: [
             NetworkLoggerPlugin(configuration: NetworkLoggerPlugin.Configuration(logOptions: .verbose)),
-            AccessTokenPlugin { _ in KeychainRepositoryDefault().getUserToken(with: "") ?? "" }
+            AccessTokenPlugin { _ in userPreferences.getCurrentCredentials()?.token ?? "" }
             ]
         )
     }

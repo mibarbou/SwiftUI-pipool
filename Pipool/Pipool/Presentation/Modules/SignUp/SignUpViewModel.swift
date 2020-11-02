@@ -8,14 +8,21 @@
 import SwiftUI
 
 class SignUpViewModel: ObservableObject, Identifiable {
+    
+    @Published var navigateTo: String?
+    
     @Published var name: String = ""
     @Published var surname: String = ""
     @Published var email: String = ""
     @Published var password: String = ""
     @Published var repeatPassword: String = ""
     
-    @Published var isFormValid: Bool = false 
-    
+    @Published var isFormValid: Bool = true {
+        didSet {
+            validateFields()
+        }
+    }
+        
     private var interactor: AuthenticationInteractor = AuthenticationInteractorDefault()
     
     func doSignUp() {
@@ -26,11 +33,26 @@ class SignUpViewModel: ObservableObject, Identifiable {
                                 password: password) { result in
             switch result {
             case .success:
-                print("go to main")
+                self.navigateTo = "Home"
             case .failure(let error):
                 print(error)
             }
         }
     }
 
+}
+
+extension SignUpViewModel {
+    
+    func validateFields() {
+        guard name.isFilled,
+              surname.isFilled,
+              email.isValidEmail,
+              password.isFilled,
+              password == repeatPassword else {
+                isFormValid = true
+                return
+        }
+        isFormValid = true
+    }
 }

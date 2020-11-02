@@ -20,6 +20,9 @@ struct LoginView: View {
                 SecurePlaceholderTextField(placeholder: Text("password"),
                                            text: $viewModel.password)
                     .padding()
+                NavigationLink(destination: SignUpView()) {
+                        Text("Not registered yet? Sign up here!")
+                    }
                 PipoolButton(text: "Login",
                              action: viewModel.doLogin)
                     .padding()

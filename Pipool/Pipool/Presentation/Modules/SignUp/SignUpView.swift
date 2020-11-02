@@ -12,28 +12,35 @@ struct SignUpView: View {
     @ObservedObject var viewModel: SignUpViewModel = SignUpViewModel()
     
     var body: some View {
-        VStack {
-            Spacer()
-            PlaceholderTextField(placeholder: Text("name"),
-                                 text: $viewModel.name).padding()
-            PlaceholderTextField(placeholder: Text("surname"),
-                                 text: $viewModel.surname).padding()
-            PlaceholderTextField(placeholder: Text("email"),
-                                 text: $viewModel.email).padding()
-            SecurePlaceholderTextField(placeholder: Text("password"),
-                                       text: $viewModel.password).padding()
-            SecurePlaceholderTextField(placeholder: Text("repeat password"),
-                                       text: $viewModel.repeatPassword).padding()
-            Spacer()
-            PipoolButton(text: "Sign up",
-                         action: viewModel.doSignUp)
+        NavigationView {
+            VStack {
+                PlaceholderTextField(placeholder: Text("name"),
+                                     text: $viewModel.name).padding()
+                PlaceholderTextField(placeholder: Text("surname"),
+                                     text: $viewModel.surname).padding()
+                PlaceholderTextField(placeholder: Text("email"),
+                                     text: $viewModel.email).padding()
+                SecurePlaceholderTextField(placeholder: Text("password"),
+                                           text: $viewModel.password).padding()
+                SecurePlaceholderTextField(placeholder: Text("repeat password"),
+                                           text: $viewModel.repeatPassword).padding()
+                Spacer()
+                PipoolButton(text: "Sign up",
+                             action: viewModel.doSignUp)
+                .padding()
+                    .disabled(!viewModel.isFormValid)
+                NavigationLink(destination: HomeView(),
+                               tag: "Home",
+                               selection: $viewModel.navigateTo) { EmptyView() }
+            }
             .padding()
-            .disabled(false)
-        }.gesture(
-            TapGesture()
-                .onEnded({ _ in
-                    self.hideKeyboard()
-            }))
+            .gesture(
+                TapGesture()
+                    .onEnded({ _ in
+//                        self.hideKeyboard()
+                }))
+        }
+        .navigationBarTitle("Sign up", displayMode: .inline)
     }
 }
 

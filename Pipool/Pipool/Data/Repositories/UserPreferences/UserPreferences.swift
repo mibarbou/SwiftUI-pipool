@@ -9,8 +9,8 @@ import Foundation
 
 protocol UserPreferences {
     var isUserLoggedIn: Bool { get }
-    func saveUser(email: String)
-    func getUserEmail() -> String?
+    func saveCredentials(credentials: Credentials)
+    func getCurrentCredentials() -> Credentials?
 }
 
 struct UserPeferencesDefault: UserPreferences {
@@ -18,14 +18,26 @@ struct UserPeferencesDefault: UserPreferences {
     
 // TODO: - Use suite group instead when is stablished
     private let userDefaults: UserDefaults = UserDefaults.standard//UserDefaults(suiteName: Configuration.suiteGroup)!
-    var isUserLoggedIn = false
+    private let keychainRepository: KeychainRepository = KeychainRepositoryDefault()
     
-    func saveUser(email: String) {
-        userDefaults.set(email, forKey: UserPeferencesDefault.emailKey)
-        userDefaults.synchronize()
+    var isUserLoggedIn: Bool {
+        return getCurrentCredentials() != nil
     }
     
-    func getUserEmail() -> String? {
-        return userDefaults.string(forKey: UserPeferencesDefault.emailKey)
+    func saveCredentials(credentials: Credentials) {
+        userDefaults.set(credentials.email,
+                         forKey: UserPeferencesDefault.emailKey)
+        userDefaults.synchronize()
+        keychainRepository.saveUser(token: credentials.token,
+                                    with: credentials.email)
+    }
+    
+    func getCurrentCredentials() -> Credentials? {
+        guard let email = userDefaults.string(forKey: UserPeferencesDefault.emailKey),
+              let token = keychainRepository.getUserToken(with: email) else {
+                return nil
+        }
+        return Credentials(email: email,
+                           token: token)
     }
 }

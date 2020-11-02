@@ -38,8 +38,9 @@ class LoginViewModel: ObservableObject, Identifiable {
         }
     }
     
-    func validatedFields() {
-        isTextFieldsFilled = email.isFilled && password.isFilled
+    private func validatedFields() {
+        isTextFieldsFilled = email.isFilled &&
+                            password.isFilled &&
+                            email.isValidEmail
     }
-    
 }

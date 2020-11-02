@@ -23,6 +23,9 @@ struct SplashView: View {
                 NavigationLink(destination: LoginView(),
                                tag: "Login",
                                selection: $viewModel.navigateTo) { EmptyView() }
+                NavigationLink(destination: HomeView(),
+                               tag: "Home",
+                               selection: $viewModel.navigateTo) { EmptyView() }
             }
             .navigationBarHidden(true)
         }
