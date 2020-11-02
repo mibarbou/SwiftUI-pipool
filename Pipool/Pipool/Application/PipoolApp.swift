@@ -15,7 +15,7 @@ struct PipoolApp: App {
     
     var body: some Scene {
         WindowGroup {
-            LoginView()
+            SplashView()
         }
         .onChange(of: scenePhase) { phase in
             if phase == .background {

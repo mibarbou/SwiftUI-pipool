@@ -16,7 +16,7 @@ class SignUpViewModel: ObservableObject, Identifiable {
     
     @Published var isFormValid: Bool = false 
     
-    private var interactor: AuthenticatorInteractor = AuthenticatorInteractorDefault()
+    private var interactor: AuthenticationInteractor = AuthenticationInteractorDefault()
     
     func doSignUp() {
         

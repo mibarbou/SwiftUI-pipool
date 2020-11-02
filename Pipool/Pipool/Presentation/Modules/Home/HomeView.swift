@@ -21,6 +21,8 @@ struct HomeView: View {
                     Text("Profile")
             }
         }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
     }
 }
 

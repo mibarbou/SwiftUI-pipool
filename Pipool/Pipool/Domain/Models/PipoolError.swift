@@ -18,7 +18,7 @@ extension PipoolError {
     var localizedDescription: String {
         switch self {
         case .generic:
-            return "A default or unkonwn error"
+            return "A default or unknown error"
         case .custom(desc: let desc):
             return desc
         case .emailFormat:
@@ -28,4 +28,3 @@ extension PipoolError {
         }
     }
 }
-

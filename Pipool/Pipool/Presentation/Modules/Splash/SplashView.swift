@@ -8,15 +8,27 @@
 import SwiftUI
 
 struct SplashView: View {
+    
+    @ObservedObject var viewModel: SplashViewModel = SplashViewModel()
+    
     var body: some View {
-        ZStack {
-            Color.blue
-            .ignoresSafeArea()
-            Text("PIPOOL")
-                .font(.title)
-                .fontWeight(.heavy)
-                .foregroundColor(Color.white)
+        NavigationView {
+            ZStack {
+                Color.blue
+                .ignoresSafeArea()
+                Text("PIPOOL")
+                    .font(.title)
+                    .fontWeight(.heavy)
+                    .foregroundColor(Color.white)
+                NavigationLink(destination: LoginView(),
+                               tag: "Login",
+                               selection: $viewModel.navigateTo) { EmptyView() }
+            }
+            .navigationBarHidden(true)
         }
+        .onAppear(perform: {
+            viewModel.requestUserLoginState()
+        })
     }
 }
 

@@ -7,12 +7,12 @@
 
 import Foundation
 
-protocol AuthenticatorInteractor {
+protocol AuthenticationInteractor {
     func loginWith(email: String, password: String, completion: @escaping (Result<Void, PipoolError>) -> Void)
     func registerWith(name: String, surname: String, email: String, password: String, completion: @escaping (Result<Void, PipoolError>) -> Void)
 }
 
-struct AuthenticatorInteractorDefault: AuthenticatorInteractor {
+struct AuthenticationInteractorDefault: AuthenticationInteractor {
     
     var apiClient: ApiClient = ApiClientDefault()
     var keychainRepository: KeychainRepository = KeychainRepositoryDefault()
@@ -53,7 +53,7 @@ struct AuthenticatorInteractorDefault: AuthenticatorInteractor {
     }
 }
 
-extension AuthenticatorInteractorDefault {
+extension AuthenticationInteractorDefault {
     private func save(token: String, email: String) {
         keychainRepository.saveUser(token: token, with: email)
     }

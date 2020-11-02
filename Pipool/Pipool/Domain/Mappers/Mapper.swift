@@ -8,7 +8,7 @@
 import Foundation
 
 protocol Mapper {
-    associatedtype IN
-    associatedtype OUT
-    static func map(input: IN) -> OUT
+    associatedtype Input
+    associatedtype Output
+    static func map(input: Input) -> Output
 }

@@ -9,12 +9,14 @@ import Foundation
 import SwiftUI
 
 class LoginViewModel: ObservableObject, Identifiable {
-    @Published var email: String = "" {
+    @Published var navigateTo: String?
+    
+    @Published var email: String = "mibarbou@gmail.com" {
         didSet {
             validatedFields()
         }
     }
-    @Published var password: String = "" {
+    @Published var password: String = "Wallb@x20" {
         didSet {
             validatedFields()
         }
@@ -22,14 +24,14 @@ class LoginViewModel: ObservableObject, Identifiable {
     
     @Published var isTextFieldsFilled: Bool = false
     
-    private var interactor: AuthenticatorInteractor = AuthenticatorInteractorDefault()
+    private var interactor: AuthenticationInteractor = AuthenticationInteractorDefault()
     
     func doLogin() {
         interactor.loginWith(email: email,
                              password: password) { result in
             switch result {
             case .success:
-                print("go to main")
+                self.navigateTo = "Home"
             case .failure(let error):
                 print(error)
             }

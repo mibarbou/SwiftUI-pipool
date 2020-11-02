@@ -16,7 +16,8 @@ protocol UserPreferences {
 struct UserPeferencesDefault: UserPreferences {
     private static let emailKey = "UserEmailKey"
     
-    private let userDefaults: UserDefaults = UserDefaults(suiteName: Configuration.suiteGroup)!
+// TODO: - Use suite group instead when is stablished
+    private let userDefaults: UserDefaults = UserDefaults.standard//UserDefaults(suiteName: Configuration.suiteGroup)!
     var isUserLoggedIn = false
     
     func saveUser(email: String) {

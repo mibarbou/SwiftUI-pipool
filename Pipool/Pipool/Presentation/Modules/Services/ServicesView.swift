@@ -9,7 +9,13 @@ import SwiftUI
 
 struct ServicesView: View {
     var body: some View {
-        Text("Services")
+        NavigationView {
+            Spacer()
+            Text("Services")
+            Spacer()
+        }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
     }
 }
 
