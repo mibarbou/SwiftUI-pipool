@@ -13,32 +13,35 @@ class LoginViewModel: ObservableObject, Identifiable {
     
     @Published var email: String = "mibarbou@gmail.com" {
         didSet {
-            validatedFields()
+            validateFields()
         }
     }
     @Published var password: String = "Wallb@x20" {
         didSet {
-            validatedFields()
+            validateFields()
         }
     }
     
     @Published var isTextFieldsFilled: Bool = false
+    @Published var isLoading: Bool = false
     
     private var interactor: AuthenticationInteractor = AuthenticationInteractorDefault()
     
     func doLogin() {
+        isLoading = true
         interactor.loginWith(email: email,
-                             password: password) { result in
+                             password: password) { [weak self] result in
+            self?.isLoading = false
             switch result {
             case .success:
-                self.navigateTo = "Home"
+                self?.navigateTo = "Home"
             case .failure(let error):
                 print(error)
             }
         }
     }
     
-    private func validatedFields() {
+    private func validateFields() {
         isTextFieldsFilled = email.isFilled &&
                             password.isFilled &&
                             email.isValidEmail

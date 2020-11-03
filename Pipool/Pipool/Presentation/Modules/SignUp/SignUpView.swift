@@ -25,10 +25,11 @@ struct SignUpView: View {
                 SecurePlaceholderTextField(placeholder: Text("repeat password"),
                                            text: $viewModel.repeatPassword).padding()
                 Spacer()
+                ProgressView().visibility(hidden: .constant(!viewModel.isLoading))
                 PipoolButton(text: "Sign up",
                              action: viewModel.doSignUp)
                 .padding()
-                    .disabled(!viewModel.isFormValid)
+                    .disabled(!viewModel.isFormValid && !viewModel.isLoading)
                 NavigationLink(destination: HomeView(),
                                tag: "Home",
                                selection: $viewModel.navigateTo) { EmptyView() }

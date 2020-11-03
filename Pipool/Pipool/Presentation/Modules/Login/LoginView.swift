@@ -23,10 +23,11 @@ struct LoginView: View {
                 NavigationLink(destination: SignUpView()) {
                         Text("Not registered yet? Sign up here!")
                     }
+                ProgressView().visibility(hidden: .constant(!viewModel.isLoading))
                 PipoolButton(text: "Login",
                              action: viewModel.doLogin)
                     .padding()
-                    .disabled(!viewModel.isTextFieldsFilled)
+                    .disabled(!viewModel.isTextFieldsFilled && !viewModel.isLoading)
                 Spacer()
                 NavigationLink(destination: HomeView(),
                                tag: "Home",

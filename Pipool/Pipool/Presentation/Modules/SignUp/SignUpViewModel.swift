@@ -11,29 +11,47 @@ class SignUpViewModel: ObservableObject, Identifiable {
     
     @Published var navigateTo: String?
     
-    @Published var name: String = ""
-    @Published var surname: String = ""
-    @Published var email: String = ""
-    @Published var password: String = ""
-    @Published var repeatPassword: String = ""
-    
-    @Published var isFormValid: Bool = true {
+    @Published var name: String = "" {
         didSet {
             validateFields()
         }
     }
+    @Published var surname: String = "" {
+        didSet {
+            validateFields()
+        }
+    }
+    @Published var email: String = "" {
+        didSet {
+            validateFields()
+        }
+    }
+    @Published var password: String = "" {
+        didSet {
+            validateFields()
+        }
+    }
+    @Published var repeatPassword: String = "" {
+        didSet {
+            validateFields()
+        }
+    }
+    
+    @Published var isFormValid: Bool = true
+    @Published var isLoading: Bool = false
         
     private var interactor: AuthenticationInteractor = AuthenticationInteractorDefault()
     
     func doSignUp() {
-        
+        self.isLoading = true
         interactor.registerWith(name: name,
                                 surname: surname,
                                 email: email,
-                                password: password) { result in
+                                password: password) { [weak self] result in
+            self?.isLoading = false
             switch result {
             case .success:
-                self.navigateTo = "Home"
+                self?.navigateTo = "Home"
             case .failure(let error):
                 print(error)
             }
