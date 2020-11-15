@@ -15,14 +15,14 @@ struct HomeView: View {
                     Image(systemName: "list.dash")
                     Text("Services")
             }
+            .navigationBarHidden(true)
+            .navigationBarBackButtonHidden(true)
             ProfileView()
                 .tabItem {
                     Image(systemName: "square.and.pencil")
                     Text("Profile")
             }
         }
-        .navigationBarHidden(true)
-        .navigationBarBackButtonHidden(true)
     }
 }
 

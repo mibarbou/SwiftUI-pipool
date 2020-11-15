@@ -8,5 +8,6 @@
 import Foundation
 
 struct ApiResponse<T: Decodable>: Decodable {
-    var data: T
+    let data: T
+    let message: String?
 }

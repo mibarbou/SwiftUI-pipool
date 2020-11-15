@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct ServicesView: View {
+    
+    @ObservedObject var viewModel: ServicesViewModel = ServicesViewModel()
+    
     var body: some View {
         NavigationView {
             Spacer()
@@ -16,6 +19,9 @@ struct ServicesView: View {
         }
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
+        .onAppear(perform: {
+            viewModel.requestServices()
+        })
     }
 }
 

@@ -62,7 +62,7 @@ struct AuthenticationInteractorDefault: AuthenticationInteractor {
 extension AuthenticationInteractorDefault {
     
     private func save(token: String, email: String) {
-        userPreferences.saveCredentials(credentials: Credentials(email: token,
-                                                                 token: email))
+        userPreferences.saveCredentials(credentials: Credentials(email: email,
+                                                                 token: token))
     }
 }

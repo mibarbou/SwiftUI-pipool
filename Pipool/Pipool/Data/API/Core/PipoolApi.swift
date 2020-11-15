@@ -11,6 +11,7 @@ import Moya
 enum PipoolApi {
     case login(_ data: LoginRequest)
     case signUp(_ data: SignUpRequest)
+    case services
 }
 
 extension PipoolApi: TargetType, AccessTokenAuthorizable {
@@ -19,6 +20,8 @@ extension PipoolApi: TargetType, AccessTokenAuthorizable {
         switch self {
         case .login, .signUp:
             return .none
+        default:
+            return .bearer
         }
     }
     
@@ -34,6 +37,8 @@ extension PipoolApi: TargetType, AccessTokenAuthorizable {
         switch self {
         case .login, .signUp:
             return commonHeaders
+        default:
+            return commonHeaders
         }
     }
 }
@@ -43,6 +48,8 @@ extension PipoolApi {
         switch self {
         case .login, .signUp:
             return .post
+        case .services:
+            return .get
         }
     }
 }
@@ -54,6 +61,8 @@ extension PipoolApi {
             return "/users/login"
         case .signUp:
             return "/users/sign-up"
+        case .services:
+            return "/services"
         }
     }
 }
@@ -65,6 +74,8 @@ extension PipoolApi {
             return .requestJSONEncodable(data)
         case .signUp(let data):
             return .requestJSONEncodable(data)
+        case .services:
+            return .requestPlain
         }
     }
 }
@@ -76,6 +87,8 @@ extension PipoolApi {
             return sampleData(filename: "login")
         case .signUp:
             return sampleData(filename: "signUp")
+        case .services:
+            return sampleData(filename: "services")
         }
     }
     

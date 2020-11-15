@@ -20,6 +20,8 @@ protocol ApiClient {
                 password: String,
                 completion: @escaping (Result<LoginResponse, PipoolApiError>) -> Void)
     
+    func services(completion: @escaping (Result<[ServiceResponse], PipoolApiError>) -> Void)
+    
 }
 
 class ApiClientDefault: ApiClient {
@@ -53,6 +55,10 @@ class ApiClientDefault: ApiClient {
         self.request(.signUp(data), completion: completion)
     }
     
+    func services(completion: @escaping (Result<[ServiceResponse], PipoolApiError>) -> Void) {
+        self.request(.services, completion: completion)
+    }
+    
 }
 
 // MARK: - Private methods
@@ -66,6 +72,24 @@ extension ApiClientDefault {
             case .success(let response):
                 do {
                     let decodedResponse = try JSONDecoder().decode(ApiResponse<T>.self, from: response.data)
+                    completion(.success(decodedResponse.data))
+                } catch {
+                    completion(.failure(.parser))
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+                completion(.failure(.generic))
+            }
+            
+        }
+    }
+    
+    private func request<T: Decodable>(_ endpoint: PipoolApi, completion: @escaping (Result<[T], PipoolApiError>) -> Void) {
+        provider.request(endpoint) { result in
+            switch result {
+            case .success(let response):
+                do {
+                    let decodedResponse = try JSONDecoder().decode(ApiResponse<[T]>.self, from: response.data)
                     completion(.success(decodedResponse.data))
                 } catch {
                     completion(.failure(.parser))
