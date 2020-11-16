@@ -12,6 +12,11 @@ enum PipoolApi {
     case login(_ data: LoginRequest)
     case signUp(_ data: SignUpRequest)
     case services
+    case createService(_ data: CreateServiceRequest)
+    case getService(id: Int)
+    case updateService(id: Int, data: CreateServiceRequest)
+    case deleteService(id: Int)
+    case categories
 }
 
 extension PipoolApi: TargetType, AccessTokenAuthorizable {
@@ -46,10 +51,14 @@ extension PipoolApi: TargetType, AccessTokenAuthorizable {
 extension PipoolApi {
     var method: Moya.Method {
         switch self {
-        case .login, .signUp:
+        case .login, .signUp, .createService:
             return .post
-        case .services:
+        case .services, .categories, .getService:
             return .get
+        case .updateService:
+            return .put
+        case .deleteService:
+            return .delete
         }
     }
 }
@@ -61,8 +70,16 @@ extension PipoolApi {
             return "/users/login"
         case .signUp:
             return "/users/sign-up"
-        case .services:
+        case .services, .createService:
             return "/services"
+        case .getService(id: let id):
+            return "/services/\(id)"
+        case .updateService(id: let id):
+            return "/services/\(id)"
+        case .deleteService(id: let id):
+            return "/services/\(id)"
+        case .categories:
+            return "/categories"
         }
     }
 }
@@ -74,7 +91,11 @@ extension PipoolApi {
             return .requestJSONEncodable(data)
         case .signUp(let data):
             return .requestJSONEncodable(data)
-        case .services:
+        case .createService(let data):
+            return .requestJSONEncodable(data)
+        case .updateService(id: _, data: let data):
+            return .requestJSONEncodable(data)
+        case .services, .getService, .categories, .deleteService:
             return .requestPlain
         }
     }
@@ -89,6 +110,10 @@ extension PipoolApi {
             return sampleData(filename: "signUp")
         case .services:
             return sampleData(filename: "services")
+        case .categories:
+            return sampleData(filename: "categories")
+        default:
+            return Data()
         }
     }
     
