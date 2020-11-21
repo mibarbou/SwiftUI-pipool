@@ -28,6 +28,20 @@ protocol ApiClient {
     
     func categories(completion: @escaping (Result<[CategoryResponse], PipoolApiError>) -> Void)
     
+    func products(serviceId: Int, completion: @escaping (Result<[ProductResponse], PipoolApiError>) -> Void)
+    func createProduct(serviceId: Int,
+                       name: String,
+                       description: String,
+                       price: Int,
+                       completion: @escaping (Result<[ProductResponse], PipoolApiError>) -> Void)
+    func updateProduct(serviceId: Int,
+                       id: Int,
+                       name: String,
+                       description: String,
+                       price: Int,
+                       completion: @escaping (Result<[ProductResponse], PipoolApiError>) -> Void)
+    func deleteProduct(serviceId: Int, id: Int, completion: @escaping (Result<Void, PipoolApiError>) -> Void)
+    
 }
 
 class ApiClientDefault: ApiClient {
@@ -93,6 +107,39 @@ class ApiClientDefault: ApiClient {
     
     func categories(completion: @escaping (Result<[CategoryResponse], PipoolApiError>) -> Void) {
         self.request(.categories, completion: completion)
+    }
+    
+    // MARK: - Products
+    
+    func products(serviceId: Int, completion: @escaping (Result<[ProductResponse], PipoolApiError>) -> Void) {
+        self.request(.products(serviceId: serviceId), completion: completion)
+    }
+    
+    func createProduct(serviceId: Int,
+                       name: String,
+                       description: String,
+                       price: Int,
+                       completion: @escaping (Result<[ProductResponse], PipoolApiError>) -> Void) {
+        let data = CreateProductRequest(name: name,
+                                        description: description,
+                                        price: price)
+        self.request(.createProduct(serviceId: serviceId, data: data), completion: completion)
+    }
+    
+    func updateProduct(serviceId: Int,
+                       id: Int,
+                       name: String,
+                       description: String,
+                       price: Int,
+                       completion: @escaping (Result<[ProductResponse], PipoolApiError>) -> Void) {
+        let data = CreateProductRequest(name: name,
+                                        description: description,
+                                        price: price)
+        self.request(.updateProduct(serviceId: serviceId, id: id, data: data), completion: completion)
+    }
+    
+    func deleteProduct(serviceId: Int, id: Int, completion: @escaping (Result<Void, PipoolApiError>) -> Void) {
+        self.request(.deleteProduct(serviceId: serviceId, id: id), completion: completion)
     }
 }
 

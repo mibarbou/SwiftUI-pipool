@@ -17,6 +17,10 @@ enum PipoolApi {
     case updateService(id: Int, data: CreateServiceRequest)
     case deleteService(id: Int)
     case categories
+    case products(serviceId: Int)
+    case createProduct(serviceId: Int, data: CreateProductRequest)
+    case updateProduct(serviceId: Int, id: Int, data: CreateProductRequest)
+    case deleteProduct(serviceId: Int, id: Int)
 }
 
 extension PipoolApi: TargetType, AccessTokenAuthorizable {
@@ -51,13 +55,13 @@ extension PipoolApi: TargetType, AccessTokenAuthorizable {
 extension PipoolApi {
     var method: Moya.Method {
         switch self {
-        case .login, .signUp, .createService:
+        case .login, .signUp, .createService, .createProduct:
             return .post
-        case .services, .categories, .getService:
+        case .services, .categories, .getService, .products:
             return .get
-        case .updateService:
+        case .updateService, .updateProduct:
             return .put
-        case .deleteService:
+        case .deleteService, .deleteProduct:
             return .delete
         }
     }
@@ -80,6 +84,14 @@ extension PipoolApi {
             return "/services/\(id)"
         case .categories:
             return "/categories"
+        case .products(serviceId: let id):
+            return "/services/\(id)/products"
+        case .createProduct(serviceId: let id):
+            return "/services/\(id)/products"
+        case .updateProduct(serviceId: let sId, id: let id, data: _):
+            return "/services/\(sId)/products/\(id)"
+        case .deleteProduct(serviceId: let sId, id: let id):
+            return "/services/\(sId)/products/\(id)"
         }
     }
 }
@@ -95,7 +107,11 @@ extension PipoolApi {
             return .requestJSONEncodable(data)
         case .updateService(id: _, data: let data):
             return .requestJSONEncodable(data)
-        case .services, .getService, .categories, .deleteService:
+        case .createProduct(serviceId: _, data: let data):
+            return .requestJSONEncodable(data)
+        case .updateProduct(serviceId: _, id: _, data: let data):
+            return .requestJSONEncodable(data)
+        case .services, .getService, .categories, .deleteService, .products, .deleteProduct:
             return .requestPlain
         }
     }
